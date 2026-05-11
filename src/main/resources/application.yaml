@@ -1,7 +1,33 @@
 spring:
   application:
     name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:5001/eureka
+
+server:
+  port: 8765
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Auth Service
+    description: Shoplith E-commerce Application (API Gateway Service)
+    version: 1.0.0
+
