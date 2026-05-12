@@ -1,12 +1,37 @@
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      server:
+        webflux:
+          routes:
+
+            # =========================
+            # AUTH SERVICE
+            # =========================
+            - id: auth-service
+              uri: lb://AUTH
+              predicates:
+                - Path=/api/v1/auth/**
+
+            # =========================
+            # CUSTOMER SERVICE
+            # =========================
+            - id: customer-service
+              uri: lb://CUSTOMER-SERVICE
+              predicates:
+                - Path=/api/v1/customer/**
+
+            # =========================
+            # CART SERVICE
+            # =========================
+            - id: cart-service
+              uri: lb://CART-SERVICE
+              predicates:
+                - Path=/api/v1/cart/**
+
 eureka:
   client:
     service-url:
@@ -15,19 +40,21 @@ eureka:
 server:
   port: 8765
 
-
 management:
   endpoints:
     web:
       exposure:
         include: '*'
+
   info:
     env:
       enabled: true
 
 info:
   app:
-    name: Auth Service
-    description: Shoplith E-commerce Application (API Gateway Service)
+    name: API Gateway
+    description: Shoplith E-commerce Application API Gateway
     version: 1.0.0
 
+jwt:
+  secret: dsamdnash32qw903u0riowqejoirj3290roijaskflnlksznfklnsanfasf
