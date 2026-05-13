@@ -1,6 +1,14 @@
 package com.shoplith.api_gateway.config;
 
+import com.shoplith.api_gateway.handler
+        .CustomAccessDeniedHandler;
+
+import com.shoplith.api_gateway.handler
+        .CustomAuthenticationEntryPoint;
+
 import io.jsonwebtoken.security.Keys;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -28,10 +36,17 @@ import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebFluxSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    private final CustomAuthenticationEntryPoint
+            authenticationEntryPoint;
+
+    private final CustomAccessDeniedHandler
+            customAccessDeniedHandler;
 
     @Bean
     public SecurityWebFilterChain securityFilterChain(
@@ -54,7 +69,18 @@ public class SecurityConfig {
                 )
 
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> {})
+
+                        oauth2
+
+                                .authenticationEntryPoint(
+                                        authenticationEntryPoint
+                                )
+
+                                .accessDeniedHandler(
+                                        customAccessDeniedHandler
+                                )
+
+                                .jwt(jwt -> {})
                 )
 
                 .build();

@@ -1,7 +1,8 @@
 spring:
   application:
     name: api-gateway
-
+  webflux:
+    throw-exception-if-no-handler-found: true
   cloud:
     gateway:
       server:
@@ -31,7 +32,8 @@ spring:
               uri: lb://CART-SERVICE
               predicates:
                 - Path=/api/v1/cart/**
-
+      globalcors:
+        add-to-simple-url-handler-mapping: true
 eureka:
   client:
     service-url:
@@ -58,3 +60,11 @@ info:
 
 jwt:
   secret: dsamdnash32qw903u0riowqejoirj3290roijaskflnlksznfklnsanfasf
+
+logging:
+  level:
+    org.springframework.security: TRACE
+    org.springframework.cloud.gateway: DEBUG
+
+
+
